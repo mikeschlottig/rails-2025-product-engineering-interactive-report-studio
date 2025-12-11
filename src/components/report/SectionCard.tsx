@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Bookmark, MessageSquare, Eye } from 'lucide-react';
@@ -15,9 +15,16 @@ export function SectionCard({ section, onOpenModal, onBookmark, isBookmarked }: 
     triggerOnce: true,
     threshold: 0.1,
   });
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.5, 
+        ease: 'easeOut' 
+      } 
+    },
   };
   const readTime = Math.ceil((section.fullContent?.split(' ').length ?? 200) / 200);
   return (

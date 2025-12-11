@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Hero } from '@/components/report/Hero';
 import { SectionCard } from '@/components/report/SectionCard';
 import { ModalCard } from '@/components/report/ModalCard';
 import { ProgressDisclosure } from '@/components/report/ProgressDisclosure';
+import { SearchBar } from '@/components/search/SearchBar';
 import { reportSections } from '@/data/report-sections';
 import { api } from '@/lib/api-client';
 import { Bookmark, ReportSection } from '@shared/types';
 import { Skeleton } from '@/components/ui/skeleton';
 export default function ReportPage() {
   const [activeModalSection, setActiveModalSection] = useState<ReportSection | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
   const { data: bookmarksData, isLoading: isLoadingBookmarks } = useQuery<{ items: Bookmark[] }>({
     queryKey: ['bookmarks'],
@@ -37,6 +38,16 @@ export default function ReportPage() {
   const handleBookmark = (section: ReportSection, note?: string) => {
     addBookmarkMutation.mutate({ title: section.id, note, data: { title: section.title } });
   };
+  const filteredSections = useMemo(() => {
+    if (!searchTerm) return reportSections;
+    const lowercasedTerm = searchTerm.toLowerCase();
+    return reportSections.filter(
+      (section) =>
+        section.title.toLowerCase().includes(lowercasedTerm) ||
+        section.excerpt.toLowerCase().includes(lowercasedTerm) ||
+        section.fullContent?.toLowerCase().includes(lowercasedTerm)
+    );
+  }, [searchTerm]);
   return (
     <div className="bg-background text-foreground min-h-screen">
       <ThemeToggle className="fixed top-4 right-4 z-50" />
@@ -61,12 +72,13 @@ export default function ReportPage() {
           title={<>The Full Report</>}
           subtitle="A comprehensive analysis of the Ruby on Rails ecosystem in 2025. Dive into architecture, best practices, and the case studies defining a new era of product engineering."
           ctaText="Start Reading"
-          ctaLink="#conclusion"
+          ctaLink="#conclusion-product-vs-data"
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-16 md:py-24">
             <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-12">
               <div className="lg:col-span-8">
+                <SearchBar onSearch={setSearchTerm} className="mb-12" />
                 <div className="space-y-16 md:space-y-24">
                   {isLoadingBookmarks ? (
                     Array.from({ length: 5 }).map((_, i) => (
@@ -76,8 +88,8 @@ export default function ReportPage() {
                         <Skeleton className="h-4 w-5/6" />
                       </div>
                     ))
-                  ) : (
-                    reportSections.map((section) => (
+                  ) : filteredSections.length > 0 ? (
+                    filteredSections.map((section) => (
                       <SectionCard
                         key={section.id}
                         section={section}
@@ -86,11 +98,16 @@ export default function ReportPage() {
                         isBookmarked={bookmarkedIds.has(section.id)}
                       />
                     ))
+                  ) : (
+                    <div className="text-center py-16">
+                      <h3 className="text-2xl font-semibold">No sections found</h3>
+                      <p className="text-muted-foreground mt-2">Try adjusting your search term.</p>
+                    </div>
                   )}
                 </div>
               </div>
               <aside className="hidden lg:block lg:col-span-4">
-                <ProgressDisclosure sections={reportSections} />
+                <ProgressDisclosure sections={filteredSections} />
               </aside>
             </div>
           </div>
