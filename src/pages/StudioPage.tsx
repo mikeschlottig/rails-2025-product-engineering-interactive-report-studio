@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -17,7 +17,7 @@ const initialAdapters: Adapter[] = [
   { id: 'adapter-4', title: 'Payment Gateway', description: 'Stripe/PayPal API', type: 'driven', details: 'Communicates with external services, translating application needs into API calls.', folderStructure: 'app/infrastructure/gateways/' },
   { id: 'adapter-5', title: 'Mailer', description: 'Sends emails', type: 'driven', details: 'Adapts the core application\'s notification requests to an email delivery service.', folderStructure: 'app/infrastructure/mailers/' },
 ];
-const initialPorts = Array.from({ length: 6 }, (_, i) => ({ id: `port-${i + 1}`, content: null as Adapter | null }));
+const initialPorts: { id: string; content: Adapter | null }[] = Array.from({ length: 6 }, (_, i) => ({ id: `port-${i + 1}`, content: null }));
 export default function StudioPage() {
   const [adapters, setAdapters] = useState(initialAdapters);
   const [ports, setPorts] = useState(initialPorts);
@@ -36,11 +36,12 @@ export default function StudioPage() {
     },
     onError: (error) => toast.error(`Failed to save: ${error.message}`),
   });
-  const handleDragStart = (event: any) => {
-    setActiveAdapter(event.active.data.current);
-    setSelectedAdapter(event.active.data.current);
+  const handleDragStart = (event: DragStartEvent) => {
+    const adapter = event.active.data.current as Adapter;
+    setActiveAdapter(adapter);
+    setSelectedAdapter(adapter);
   };
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { over } = event;
     if (over && activeAdapter) {
       const portIndex = ports.findIndex(p => p.id === over.id);
@@ -74,6 +75,7 @@ export default function StudioPage() {
                 <Link to="/report" className="transition-colors hover:text-foreground/80 text-foreground/60">Report</Link>
                 <Link to="/explorer" className="transition-colors hover:text-foreground/80 text-foreground/60">Explorer</Link>
                 <Link to="/studio" className="transition-colors text-foreground">Studio</Link>
+                <Link to="/playground" className="transition-colors hover:text-foreground/80 text-foreground/60">Playground</Link>
                 <Link to="/resources" className="transition-colors hover:text-foreground/80 text-foreground/60">Resources</Link>
               </nav>
             </div>

@@ -15,6 +15,7 @@ import { HomePage } from '@/pages/HomePage'
 import ReportPage from '@/pages/ReportPage';
 import ExplorerPage from '@/pages/ExplorerPage';
 import StudioPage from '@/pages/StudioPage';
+import PlaygroundPage from '@/pages/PlaygroundPage';
 import ResourcesPage from '@/pages/ResourcesPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -36,6 +37,11 @@ const router = createBrowserRouter([
   {
     path: "/studio",
     element: <StudioPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/playground",
+    element: <PlaygroundPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

@@ -20,7 +20,7 @@ export function TimelineItem({ item, onClick, isLeft = false }: TimelineItemProp
   });
   const variants = {
     hidden: { opacity: 0, x: isLeft ? -100 : 100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: ['easeOut'] } },
   };
   return (
     <div ref={ref} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">

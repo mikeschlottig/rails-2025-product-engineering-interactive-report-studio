@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen, CodeXml, Layers3 } from 'lucide-react';
+import { ArrowRight, BookOpen, CodeXml, Layers3, TestTubeDiagonal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -28,6 +28,13 @@ const features = [
     link: '/explorer',
     cta: 'Start Exploring',
   },
+  {
+    icon: <TestTubeDiagonal className="w-8 h-8 text-blue-500" />,
+    title: 'Patterns Playground',
+    description: 'Generate and customize Ruby service object templates interactively based on best practices.',
+    link: '/playground',
+    cta: 'Try the Playground',
+  },
 ];
 export function HomePage() {
   return (
@@ -44,6 +51,7 @@ export function HomePage() {
               <Link to="/report" className="transition-colors hover:text-foreground/80 text-foreground/60">Report</Link>
               <Link to="/explorer" className="transition-colors hover:text-foreground/80 text-foreground/60">Explorer</Link>
               <Link to="/studio" className="transition-colors hover:text-foreground/80 text-foreground/60">Studio</Link>
+              <Link to="/playground" className="transition-colors hover:text-foreground/80 text-foreground/60">Playground</Link>
               <Link to="/resources" className="transition-colors hover:text-foreground/80 text-foreground/60">Resources</Link>
             </nav>
           </div>
@@ -68,7 +76,7 @@ export function HomePage() {
                 Dive into interactive sections, from the full report to hands-on architectural tools.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}

@@ -62,6 +62,7 @@ export default function ReportPage() {
               <Link to="/report" className="transition-colors text-foreground">Report</Link>
               <Link to="/explorer" className="transition-colors hover:text-foreground/80 text-foreground/60">Explorer</Link>
               <Link to="/studio" className="transition-colors hover:text-foreground/80 text-foreground/60">Studio</Link>
+              <Link to="/playground" className="transition-colors hover:text-foreground/80 text-foreground/60">Playground</Link>
               <Link to="/resources" className="transition-colors hover:text-foreground/80 text-foreground/60">Resources</Link>
             </nav>
           </div>

@@ -38,7 +38,7 @@ ${sendEmail ? `
       ${isResultMonad ? `return OpenStruct.new(success?: false, error: charge_result.error) unless charge_result.success?` : `raise charge_result.error unless charge_result.success?`}
 ${sendEmail ? `
       SubscriptionMailer.welcome(@user).deliver_later` : ''}
-      ${isResultMonad ? `OpenStruct.new(success?: true, data: subscription)` : `subscription`}`}
+      ${isResultMonMonad ? `OpenStruct.new(success?: true, data: subscription)` : `subscription`}`}
     ${isResultMonad ? `rescue StandardError => e
       OpenStruct.new(success?: false, error: e.message)
     end` : `end`}
