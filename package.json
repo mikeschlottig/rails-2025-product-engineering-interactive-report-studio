@@ -1,5 +1,5 @@
 {
-  "name": "rails2025-showcase-kcmhuj5ig5tpx27yd4uu8",
+  "name": "vite-cf-do-v2-runner",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +9,7 @@
     "lint": "eslint --cache -f json --quiet .",
     "preview": "bun run build && vite preview --host 0.0.0.0 --port ${PORT:-4173}",
     "deploy": "bun run build && wrangler deploy",
-    "cf-typegen": "wrangler types",
-    "prepare": "bun .bootstrap.js || true"
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -51,6 +50,7 @@
     "cloudflare": "^5.0.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "copy-to-clipboard": "^3.3.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -68,6 +68,7 @@
     "react-flow": "^1.0.3",
     "react-hook-form": "^7.60.0",
     "react-hotkeys-hook": "^5.1.0",
+    "react-intersection-observer": "9",
     "react-resizable-panels": "^3.0.3",
     "react-router-dom": "6.30.0",
     "react-select": "^5.10.2",
