@@ -77,7 +77,10 @@ function updateWranglerJsonc() {
 }
 
 function runSetupCommands() {
-    const commands = [];
+    const commands = [
+    "bun add copy-to-clipboard@^3.3.1",
+    "bun add react-intersection-observer@9"
+];
     
     if (commands.length === 0) {
         console.log('⊘ No setup commands to run');
