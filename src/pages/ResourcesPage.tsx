@@ -57,7 +57,14 @@ const resourcesData = {
     },
   ],
 };
-type Resource = typeof resourcesData.cheatsheets[0];
+type Resource = {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  content?: string;
+  link?: string;
+};
 export default function ResourcesPage() {
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
   return (

@@ -7,8 +7,9 @@ interface HexagonPortProps {
   children: React.ReactNode;
   className?: string;
   isOver: boolean;
+  style?: React.CSSProperties;
 }
-function HexagonPort({ id, children, className, isOver }: HexagonPortProps) {
+function HexagonPort({ id, children, className, isOver, style }: HexagonPortProps) {
   const { setNodeRef } = useDroppable({ id });
   return (
     <div
@@ -18,7 +19,7 @@ function HexagonPort({ id, children, className, isOver }: HexagonPortProps) {
         isOver ? 'bg-primary/20 scale-105 border-primary' : 'bg-secondary/50',
         className
       )}
-      style={{ transform: 'translate(-50%, -50%)' }}
+      style={{ ...style, transform: 'translate(-50%, -50%)' }}
     >
       <div className="text-center p-2">{children}</div>
     </div>
@@ -39,7 +40,7 @@ export function HexagonCore({ ports, activeId }: HexagonCoreProps) {
   ];
   return (
     <div className="relative w-64 h-72 md:w-80 md:h-96 mx-auto">
-      <div 
+      <div
         className="absolute inset-0 bg-secondary flex items-center justify-center"
         style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
       >
