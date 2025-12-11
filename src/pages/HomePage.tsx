@@ -1,148 +1,108 @@
-// Home page of the app, Currently a demo page for demonstration.
-// Please rewrite this file to implement your own logic. Do not delete it to use some other file as homepage. Simply replace the entire contents of this file.
-import { useEffect } from 'react'
-import { Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { Toaster, toast } from '@/components/ui/sonner'
-import { create } from 'zustand'
-import { useShallow } from 'zustand/react/shallow'
-// import { AppLayout } from '@/components/layout/AppLayout'
-
-// Timer store: independent slice with a clear, minimal API, for demonstration
-type TimerState = {
-  isRunning: boolean;
-  elapsedMs: number;
-  start: () => void;
-  pause: () => void;
-  reset: () => void;
-  tick: (deltaMs: number) => void;
-}
-
-const useTimerStore = create<TimerState>((set) => ({
-  isRunning: false,
-  elapsedMs: 0,
-  start: () => set({ isRunning: true }),
-  pause: () => set({ isRunning: false }),
-  reset: () => set({ elapsedMs: 0, isRunning: false }),
-  tick: (deltaMs) => set((s) => ({ elapsedMs: s.elapsedMs + deltaMs })),
-}))
-
-// Counter store: separate slice to showcase multiple stores without coupling
-type CounterState = {
-  count: number;
-  inc: () => void;
-  reset: () => void;
-}
-
-const useCounterStore = create<CounterState>((set) => ({
-  count: 0,
-  inc: () => set((s) => ({ count: s.count + 1 })),
-  reset: () => set({ count: 0 }),
-}))
-
-function formatDuration(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000))
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
-}
-
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowRight, BookOpen, CodeXml, Layers3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Toaster } from '@/components/ui/sonner';
+import { Hero } from '@/components/report/Hero';
+const features = [
+  {
+    icon: <BookOpen className="w-8 h-8 text-orange-500" />,
+    title: 'In-Depth Report',
+    description: 'Explore the full 2025 analysis on Ruby on Rails, from architecture to engineering standards.',
+    link: '/report',
+    cta: 'Read the Report',
+  },
+  {
+    icon: <Layers3 className="w-8 h-8 text-indigo-500" />,
+    title: 'Architecture Studio',
+    description: 'Visually experiment with Hexagonal Architecture and see how modern Rails apps are built for scale.',
+    link: '/studio',
+    cta: 'Open the Studio',
+  },
+  {
+    icon: <CodeXml className="w-8 h-8 text-green-500" />,
+    title: 'Pattern Explorer',
+    description: 'An interactive journey through key patterns like Service Objects, modular monoliths, and more.',
+    link: '/explorer',
+    cta: 'Start Exploring',
+  },
+];
 export function HomePage() {
-  // Select only what is needed to avoid unnecessary re-renders
-  const { isRunning, elapsedMs } = useTimerStore(
-    useShallow((s) => ({ isRunning: s.isRunning, elapsedMs: s.elapsedMs })),
-  )
-  const start = useTimerStore((s) => s.start)
-  const pause = useTimerStore((s) => s.pause)
-  const resetTimer = useTimerStore((s) => s.reset)
-  const count = useCounterStore((s) => s.count)
-  const inc = useCounterStore((s) => s.inc)
-  const resetCount = useCounterStore((s) => s.reset)
-
-  // Drive the timer only while running; avoid update-depth issues with a scoped RAF
-  useEffect(() => {
-    if (!isRunning) return
-    let raf = 0
-    let last = performance.now()
-    const loop = () => {
-      const now = performance.now()
-      const delta = now - last
-      last = now
-      // Read store API directly to keep effect deps minimal and stable
-      useTimerStore.getState().tick(delta)
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, [isRunning])
-
-  const onPleaseWait = () => {
-    inc()
-    if (!isRunning) {
-      start()
-      toast.success('Building your app…', {
-        description: 'Hang tight, we\'re setting everything up.',
-      })
-    } else {
-      pause()
-      toast.info('Taking a short pause', {
-        description: 'We\'ll continue shortly.',
-      })
-    }
-  }
-
-  const formatted = formatDuration(elapsedMs)
-
   return (
-    // <AppLayout> Uncomment this if you want to use the sidebar
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4 overflow-hidden relative">
-        <ThemeToggle />
-        <div className="absolute inset-0 bg-gradient-rainbow opacity-10 dark:opacity-20 pointer-events-none" />
-        <div className="text-center space-y-8 relative z-10 animate-fade-in">
-          <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-primary floating">
-              <Sparkles className="w-8 h-8 text-white rotating" />
-            </div>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-balance leading-tight">
-            Creating your <span className="text-gradient">app</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto text-pretty">
-            Your application would be ready soon.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button 
-              size="lg"
-              onClick={onPleaseWait}
-              className="btn-gradient px-8 py-4 text-lg font-semibold hover:-translate-y-0.5 transition-all duration-200"
-              aria-live="polite"
-            >
-              Please Wait
-            </Button>
-          </div>
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-            <div>
-              Time elapsed: <span className="font-medium tabular-nums text-foreground">{formatted}</span>
-            </div>
-            <div>
-              Coins: <span className="font-medium tabular-nums text-foreground">{count}</span>
-            </div>
-          </div>
-          <div className="flex justify-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { resetTimer(); resetCount(); toast('Reset complete') }}>
-              Reset
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => { inc(); toast('Coin added') }}>
-              Add Coin
-            </Button>
+    <div className="bg-background text-foreground min-h-screen">
+      <ThemeToggle className="fixed top-4 right-4" />
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-500" />
+              <span className="font-bold font-display text-xl">Rails 2025</span>
+            </Link>
+            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+              <Link to="/report" className="transition-colors hover:text-foreground/80 text-foreground/60">Report</Link>
+              <Link to="/explorer" className="transition-colors hover:text-foreground/80 text-foreground/60">Explorer</Link>
+              <Link to="/studio" className="transition-colors hover:text-foreground/80 text-foreground/60">Studio</Link>
+              <Link to="/resources" className="transition-colors hover:text-foreground/80 text-foreground/60">Resources</Link>
+            </nav>
           </div>
         </div>
-        <footer className="absolute bottom-8 text-center text-muted-foreground/80">
-          <p>Powered by Cloudflare</p>
-        </footer>
-        <Toaster richColors closeButton />
-      </div>
-    // </AppLayout> Uncomment this if you want to use the sidebar
-  )
+      </header>
+      <main>
+        <Hero
+          title={
+            <>
+              The State of <span className="text-gradient">Ruby on Rails</span> in 2025
+            </>
+          }
+          subtitle="An interactive report and studio exploring modern architecture, engineering standards, and the ecosystem that powers the world's most ambitious products."
+          ctaText="Explore the Report"
+          ctaLink="/report"
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-16 md:py-24 lg:py-32">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full flex flex-col bg-card/50 hover:bg-card/90 border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                    <CardHeader className="flex-row items-start gap-4">
+                      <div className="w-14 h-14 rounded-full bg-secondary center flex-shrink-0">{feature.icon}</div>
+                      <div>
+                        <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
+                        <CardDescription className="mt-1">{feature.description}</CardDescription>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="mt-auto pt-4">
+                      <Button asChild variant="link" className="p-0 text-orange-500 group">
+                        <Link to={feature.link}>
+                          {feature.cta}
+                          <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer className="border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>Built with ❤️ at Cloudflare. An interactive report by the Cloudflare Special Projects Team.</p>
+            <p>&copy; {new Date().getFullYear()} Rails 2025 Showcase. All Rights Reserved.</p>
+          </div>
+        </div>
+      </footer>
+      <Toaster richColors closeButton />
+    </div>
+  );
 }
