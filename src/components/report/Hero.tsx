@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Code, Database, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -9,8 +9,10 @@ interface HeroProps {
   ctaLink: string;
 }
 export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
-  const floatingIconVariants = {
-    float: {
+  const floatingIconVariants: Variants = {
+    initial: { opacity: 0 },
+    animate: {
+      opacity: 1,
       y: [0, -8, 0],
       transition: {
         duration: 3,
@@ -20,8 +22,8 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
     },
   };
   return (
-    <div className="relative w-full overflow-hidden">
-      <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-[bottom_1px_center] dark:bg-grid-slate-400/[0.05] dark:bg-bottom mask-gradient" />
+    <div className="relative w-full overflow-hidden bg-background">
+      <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-[bottom_1px_center] dark:bg-grid-slate-400/[0.05] dark:bg-bottom [mask-image:linear-gradient(to_bottom,white,transparent)]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-24 md:py-32 lg:py-40 text-center">
           <motion.div
@@ -51,13 +53,13 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
           </motion.div>
         </div>
       </div>
-      <motion.div variants={floatingIconVariants} animate="float" style={{ transitionDelay: '0.2s' }} className="absolute top-1/4 left-1/4 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full center text-orange-500 opacity-50 hidden lg:flex">
+      <motion.div variants={floatingIconVariants} initial="initial" animate="animate" style={{ transitionDelay: '0.2s' }} className="absolute top-1/4 left-1/4 w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full center text-orange-500 opacity-50 hidden lg:flex">
         <Code className="w-6 h-6" />
       </motion.div>
-      <motion.div variants={floatingIconVariants} animate="float" style={{ transitionDelay: '0.5s' }} className="absolute top-1/3 right-1/4 w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-full center text-indigo-500 opacity-50 hidden lg:flex">
+      <motion.div variants={floatingIconVariants} initial="initial" animate="animate" style={{ transitionDelay: '0.5s' }} className="absolute top-1/3 right-1/4 w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-full center text-indigo-500 opacity-50 hidden lg:flex">
         <Layers className="w-6 h-6" />
       </motion.div>
-      <motion.div variants={floatingIconVariants} animate="float" style={{ transitionDelay: '0.8s' }} className="absolute bottom-1/4 left-1/3 w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full center text-green-500 opacity-50 hidden lg:flex">
+      <motion.div variants={floatingIconVariants} initial="initial" animate="animate" style={{ transitionDelay: '0.8s' }} className="absolute bottom-1/4 left-1/3 w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full center text-green-500 opacity-50 hidden lg:flex">
         <Database className="w-6 h-6" />
       </motion.div>
     </div>
