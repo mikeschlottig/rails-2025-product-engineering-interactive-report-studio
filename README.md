@@ -4,7 +4,7 @@ A high-end, interactive microsite that transforms comprehensive Rails 2025 resea
 
 This project demonstrates Ruby on Rails' evolution in 2025, focusing on product vs. data engineering, modern architecture patterns (Service Objects, Hexagonal Architecture), tooling (RuboCop Omakase vs. StandardRB, RSpec vs. Minitest), and case studies from Shopify, GitHub, and 37signals. The site is primarily informational but offers engaging interactions for deeper exploration.
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/mikeschlottig/rails-2025-product-engineering-interactive-report-studio)
 
 ## Features
 
@@ -131,7 +131,7 @@ Deploy to Cloudflare Workers for global edge distribution with Durable Objects f
 
 The deployment includes automatic asset handling (SPA mode) and API proxying. Monitor logs and metrics via the Cloudflare dashboard.
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/mikeschlottig/rails-2025-product-engineering-interactive-report-studio)
 
 ## Contributing
 
